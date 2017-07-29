@@ -134,7 +134,15 @@ func (pin *GPIO_Pin) GetState() uint8 {
         log.Fatal(err)
     }
 
-	result := uint8(buffer[0])
+	/* buffer represent ASCII code of the value
+	Reading value may be:
+	- 0x30 - equal 0
+	- 0x31 - equal 1
+
+	For convert ASCII value to uint8 need to subtract 0x30 from code
+	*/
+
+	result := uint8(buffer[0] - 0x30)
 	/* Return read value */
 	return result
 }
