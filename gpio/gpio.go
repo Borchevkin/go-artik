@@ -5,10 +5,10 @@ import "io/ioutil"
 import "strconv"
 import "fmt"
 
-const GPIO_LOW uint8 = 0
-const GPIO_HIGH uint8 = 1
-const GPIO_IN string = "in"
-const GPIO_OUT string = "out"
+const LOW uint8 = 0
+const HIGH uint8 = 1
+const IN string = "in"
+const OUT string = "out"
 
 type GPIO_Pin struct {
 	number uint8
@@ -41,8 +41,8 @@ func (pin *GPIO_Pin) setDirection() {
 	
 	/sys/class/gpio/gpio<number>/direction
 
-		- "in" for input (in this package for it there is GPIO_IN const)
-		- "out" for output (in this package for it there is GPIO_OUT const)
+		- "in" for input (in this package for it there is IN const)
+		- "out" for output (in this package for it there is OUT const)
 
 	For example in bash (set 124 pin to out)
 
@@ -78,8 +78,8 @@ func (pin *GPIO_Pin) setOutput() {
 
 	/sys/class/gpio/gpio<number>/value
 
-		- 1 for high level (in this package for it there is GPIO_HIGH const)
-		- 0 for low level (in this package for it there is GPIO_LOW const)
+		- 1 for high level (in this package for it there is HIGH const)
+		- 0 for low level (in this package for it there is LOW const)
 
 	For example in bash (set high value on 124 pin)
 
@@ -95,20 +95,20 @@ func (pin *GPIO_Pin) setOutput() {
 }
 
 func (pin *GPIO_Pin) Set() {
-	pin.value = GPIO_HIGH
+	pin.value = HIGH
 	pin.setOutput()
 }
 
 func (pin *GPIO_Pin) Clear() {
-	pin.value = GPIO_LOW
+	pin.value = LOW
 	pin.setOutput()
 }
 
 func (pin *GPIO_Pin) Toggle() {
-	if (pin.value == GPIO_LOW) {
-		pin.value = GPIO_HIGH
+	if (pin.value == LOW) {
+		pin.value = HIGH
 	} else {
-		pin.value = GPIO_LOW
+		pin.value = LOW
 	}
 	pin.setOutput()
 }
@@ -118,8 +118,8 @@ func (pin *GPIO_Pin) GetState() uint8 {
 
 	/sys/class/gpio/gpio<number>/value
 
-		- 1 for high level (in this package for it there is GPIO_HIGH const)
-		- 0 for low level (in this package for it there is GPIO_LOW const)
+		- 1 for high level (in this package for it there is HIGH const)
+		- 0 for low level (in this package for it there is LOW const)
 
 	For example in bash (get value on 124 pin)
 
