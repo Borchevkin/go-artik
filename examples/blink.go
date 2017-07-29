@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 import "time"
-import "github.com/lab409/go-artik"
+import "github.com/lab409/go-artik/gpio"
 
 func main() {
 	fmt.Println("\nExample. Blink gpio125 (Arduino 8 pin)")
