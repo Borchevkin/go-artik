@@ -134,7 +134,7 @@ func (pin *GPIO_Pin) GetState() uint8 {
         log.Fatal(err)
     }
 
-	result := uint8(strconv.Atoi(buffer))
+	result := uint8(buffer[0])
 	/* Return read value */
 	return result
 }
