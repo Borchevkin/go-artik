@@ -1,5 +1,6 @@
 package gpio
 
+import "log"
 import "io/ioutil"
 import "strconv"
 import "fmt"
@@ -68,6 +69,10 @@ func (pin *GPIO_Pin) init() {
 	pin.setDirection()
 }
 
+func (pin *GPIO_Pin) deinit() {
+
+}
+
 func (pin *GPIO_Pin) setOutput() {
 	/* For set out value of the pin need write to 
 
@@ -108,8 +113,30 @@ func (pin *GPIO_Pin) Toggle() {
 	pin.setOutput()
 }
 
-func (pin *GPIO_Pin) deinit() {
+func (pin *GPIO_Pin) GetState() uint8 {
+	/* For get in value of the pin need read 2 bytes to string from file
 
+	/sys/class/gpio/gpio<number>/value
+
+		- 1 for high level (in this package for it there is GPIO_HIGH const)
+		- 0 for low level (in this package for it there is GPIO_LOW const)
+
+	For example in bash (get value on 124 pin)
+
+	cat /sys/class/gpio/gpio124/value
+	*/
+
+	/* Construct pin filename */
+	pinFile := fmt.Sprintf("/sys/class/gpio/gpio%s/value", strconv.Itoa(int(pin.number)))
+	/* Read data from pin file */
+	buffer, err := ioutil.ReadFile(pinFile)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+	result := uint8(strconv.Atoi(buffer))
+	/* Return read value */
+	return result
 }
 
 func NewPin(number uint8, direction string) *GPIO_Pin {
