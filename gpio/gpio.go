@@ -38,7 +38,7 @@ func (pin *GPIO_Pin) exportPin() {
 	/* Write pin number storing in buffer to file */
 	err := ioutil.WriteFile("/sys/class/gpio/export", buffer, 0644)
 	if err != nil {
-        log.Fatal(err)
+        log.Println(err)
     }
 }
 
