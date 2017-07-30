@@ -33,7 +33,8 @@ func (pin *GPIO_Pin) exportPin() {
 	*/
 
 	/* Set to buffer number of the pin */
-	buffer := []byte{pin.number}
+	s := strconv.FormatUint(uint64(pin.number), 10)
+	buffer := []byte(s)
 	
 	/* Write pin number storing in buffer to file */
 	err := ioutil.WriteFile("/sys/class/gpio/export", buffer, 0644)
@@ -98,7 +99,8 @@ func (pin *GPIO_Pin) setOutput() {
 	*/
 
 	/* Set to buffer direction of the pin */
-	buffer := []byte(strconv.Itoa(int(pin.value)))
+	s := strconv.FormatUint(uint64(pin.value), 10)
+	buffer := []byte(s)
 	
 	/* Forming name of file accodring to sysfs */
 	pinFile := fmt.Sprintf("/sys/class/gpio/gpio%s/value", strconv.Itoa(int(pin.number)))
