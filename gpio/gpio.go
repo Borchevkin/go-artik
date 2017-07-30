@@ -32,8 +32,14 @@ func (pin *GPIO_Pin) exportPin() {
 	/sys/class/gpio/gpio124/
 	*/
 
+	/* Set to buffer number of the pin */
 	buffer := []byte{pin.number}
-	ioutil.WriteFile("/sys/class/gpio/export", buffer, 0644)
+	
+	/* Write pin number storing in buffer to file */
+	err := ioutil.WriteFile("/sys/class/gpio/export", buffer, 0644)
+	if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func (pin *GPIO_Pin) setDirection() {
@@ -51,10 +57,15 @@ func (pin *GPIO_Pin) setDirection() {
 
 	/* Set to buffer direction of the pin */
 	buffer := []byte(pin.direction)
+
 	/* Forming name of file accodring to sysfs */
 	pinFile := fmt.Sprintf("/sys/class/gpio/gpio%s/direction", strconv.Itoa(int(pin.number)))
+	
 	/* Write direction stored in buffer to file */
-	ioutil.WriteFile(pinFile, buffer, 0644)
+	err := ioutil.WriteFile(pinFile, buffer, 0644)
+	if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func (pin *GPIO_Pin) init() {
@@ -88,10 +99,15 @@ func (pin *GPIO_Pin) setOutput() {
 
 	/* Set to buffer direction of the pin */
 	buffer := []byte(strconv.Itoa(int(pin.value)))
+	
 	/* Forming name of file accodring to sysfs */
 	pinFile := fmt.Sprintf("/sys/class/gpio/gpio%s/value", strconv.Itoa(int(pin.number)))
+	
 	/* Write direction stored in buffer to file */
-	ioutil.WriteFile(pinFile, buffer, 0644)
+	err := ioutil.WriteFile(pinFile, buffer, 0644)
+	if err != nil {
+        log.Fatal(err)
+    }
 }
 
 func (pin *GPIO_Pin) Set() {
@@ -128,12 +144,13 @@ func (pin *GPIO_Pin) GetState() uint8 {
 
 	/* Construct pin filename */
 	pinFile := fmt.Sprintf("/sys/class/gpio/gpio%s/value", strconv.Itoa(int(pin.number)))
+	
 	/* Read data from pin file */
 	buffer, err := ioutil.ReadFile(pinFile)
     if err != nil {
         log.Fatal(err)
     }
-
+	
 	/* buffer represent ASCII code of the value
 	Reading value may be:
 	- 0x30 - equal 0
@@ -141,7 +158,6 @@ func (pin *GPIO_Pin) GetState() uint8 {
 
 	For convert ASCII value to uint8 need to subtract 0x30 from code
 	*/
-
 	result := uint8(buffer[0] - 0x30)
 	/* Return read value */
 	return result
